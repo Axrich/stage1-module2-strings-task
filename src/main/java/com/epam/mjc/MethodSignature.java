@@ -1,79 +1,40 @@
 package com.epam.mjc;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
-public class MethodSignature {
+public class StringSplitter {
 
-    private String accessModifier;
-    private String returnType;
-    private String methodName;
-    private final int argumentCount;
-    private final List<Argument> arguments;
+    /**
+     * Splits given string applying all delimeters to it. Keeps order of result substrings as in source string.
+     *
+     * @param source     source string
+     * @param delimiters collection of delimiter strings
+     * @return List of substrings
+     */
+    public List<String> splitByDelimiters(String source, Collection<String> delimiters) {
+        List<String> result = new ArrayList<>();
+        int startIndex = 0;
 
-    public MethodSignature(String accessModifier, String returnType, String methodName,  int argumentCount, List<Argument> arguments) {
-        this.accessModifier = accessModifier;
-        this.returnType = returnType;
-        this.methodName = methodName;
-        this.argumentCount = argumentCount;
-        this.arguments = arguments;
+        for (int i = 0; i < source.length(); i++) {
+
+            for (String delimiter : delimiters) {
+                if (!delimiter.isEmpty() && source.startsWith(delimiter, i)) {
+                    result.add(source.substring(startIndex, i));
+                    startIndex = i + delimiter.length();
+
+                    break;
+                }
+            }}
+
+            if (startIndex <source.length() ) {
+                result.add(source.substring(startIndex));
             }
-
-    public MethodSignature(String methodName) {
-        this(null, null, methodName, 0, new ArrayList<>());
-    }
-
-    public String getMethodName() {
-        return methodName;
-    }
-
-    public void setMethodName(String methodName) {
-        this.methodName = methodName;
-    }
-
-    public String getAccessModifier() {
-        return accessModifier;
-    }
-
-    public void setAccessModifier(String accessModifier) {
-        this.accessModifier = accessModifier;
-    }
-
-    public String getReturnType() {
-        return returnType;
-    }
-
-    public void setReturnType(String returnType) {
-        this.returnType = returnType;
-    }
-
-    public List<Argument> getArguments() {
-        return arguments;
-    }
-
-    public static class Argument {
-        private String type;
-        private String name;
-
-        public Argument(String type, String name) {
-            this.type = type;
-            this.name = name;
+        for (int i = result.size() - 1; i >= 0; i--) {
+            if (result.get(i).isEmpty()) {
+                result.remove(i);
+            }
         }
-
-        public String getType() {
-            return type;
-        }
-
-        public void setType(String type) {
-            this.type = type;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-    }
-}
+        return result;
+    }}
